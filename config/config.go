@@ -10,6 +10,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var Validate_Error string
+
 type ServerConfig struct {
 	Port            int
 	AllowOrigins    []string
