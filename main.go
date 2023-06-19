@@ -22,6 +22,7 @@ func main() {
 	router := gin.Default()
 	fmt.Println(router)
 	router.POST("/Registers", post_user.PostUserInfo)
+	router
 	fmt.Println("post call")
 	//router.POST("/login", post_user.LoginHandler)
 	router.Run("localhost:8080")

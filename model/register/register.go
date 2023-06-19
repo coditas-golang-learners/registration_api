@@ -12,15 +12,16 @@ import (
 
 type Register struct {
 	ID        int    `json:"id"`
-	Username  string `json:"Username" validate:"required,min=4,max=30,customUsernameValidation"`
-	Firstname string `json:"Firstname" validate:"required,alpha,customFirstnameValidation"`
+	Username  string `json:"Username" validate:"required,min=4,max=30,alphanum,UserValidation"`
+	Firstname string `json:"Firstname" validate:"required,alpha"`
 	Lastname  string `json:"Lastname"`
 	Email     string `json:"Email" validate:"required,email"`
-	Pan       string `json:"Pan"`
-	Adhar     string `json:"Adhar"`
-	Mobile    string `json:"Mobile" validate:"required,len=10|len=12`
-	Password  string `json:"Password" validate:"required,min=6,max=15,customPasswordValidation"`
+	Pan       string `json:"Pan" validate:"UserValidation"`
+	Adhar     string `json:"Adhar" validate:"UserValidation"`
+	Mobile    string `json:"Mobile" validate:"required,len=10|len=12,numeric"`
+	Password  string `json:"Password" validate:"required,min=6,max=30,UserValidation"`
 }
+
 type Login struct {
 	Username string `json:"Username" validate:"required,min=4,max=30,customUsernameValidation"`
 	Password string `json:"Password" validate:"required,min=8,alphanum"`

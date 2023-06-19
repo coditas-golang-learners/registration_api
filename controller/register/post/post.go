@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
 func PostUserInfo(c *gin.Context) {
@@ -24,31 +23,11 @@ func PostUserInfo(c *gin.Context) {
 		return
 	}
 
-	// Create a new validator instance
-	validate := validator.New()
-
-	// Register custom validation functions
-	validate.RegisterValidation("customUsernameValidation", validated.ValidateUsername)
-	//fmt.Println("Register validations error  ", err)
-	validate.RegisterValidation("customFirstnameValidation", validated.ValidateFirstname)
-	validate.RegisterValidation("customPasswordValidation", validated.ValidatePassword)
-
-	// Use the validator instance to validate your structs
-	if err := validate.Struct(RequstPayload); err != nil {
-		// Handle validation errors
-		validationErrors := err.(validator.ValidationErrors)
-		var err_msg string
-		fmt.Println("valdiations error ", validationErrors[0].Error())
-		err_msg = fmt.Sprintf("Validation error for %s", validationErrors[0].Field())
-		// for _, fieldErr := range validationErrors {
-
-		// 	err_msg = fmt.Sprintf("Validation error for %s", fieldErr.Field())
-
-		// }
-		c.JSON(http.StatusBadRequest, gin.H{"error": err_msg})
+	validate_error := validated.SendRequestValidationError(RequstPayload)
+	if validate_error != "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": validate_error})
 		return
 	}
-
 	user_check := validated.Check_username(RequstPayload)
 	if user_check {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Username already exists"})
