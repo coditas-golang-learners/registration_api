@@ -58,7 +58,7 @@ func Check_username(user Register.Register) bool {
 
 	// Check if the username already exists
 	var existingUser Register.Register
-	err := MysqlWrapper.Client.QueryRow("SELECT username FROM registers WHERE username = ?", user.Username).Scan(&existingUser.Username)
+	err := MysqlWrapper.Client.QueryRow("SELECT username,FROM registers WHERE username = ?", user.Username).Scan(&existingUser.Username, &existingUser.Password)
 
 	// Handle the error
 	if err != nil {
@@ -187,4 +187,27 @@ func SendRequestValidationError(RequstPayload Register.Register) string {
 	}
 
 	return errMsg
+}
+
+func Check_username_login(user Register.Login) bool {
+	// Check if the MysqlWrapper.Client object is nil
+	if MysqlWrapper.Client == nil {
+		fmt.Println("MySQL client is not initialized")
+		return false
+	}
+
+	// Check if the username already exists
+	var existingUser Register.Login
+	err := MysqlWrapper.Client.QueryRow("SELECT username, password FROM registers WHERE username=? AND password=?", user.Username, user.Password).Scan(&existingUser.Username, &existingUser.Password)
+
+	// Handle the error
+	if err != nil {
+		if err != sql.ErrNoRows {
+			fmt.Println(err)
+		}
+		return false
+	}
+
+	// Username already exists
+	return true
 }

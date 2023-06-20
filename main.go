@@ -3,6 +3,7 @@ package main
 import (
 	"boilerplate/config"
 	post_user "boilerplate/controller/register/post"
+	post_signup "boilerplate/controller/register/post_signup"
 	sql_connection "boilerplate/library/mysql"
 	"fmt"
 
@@ -22,8 +23,7 @@ func main() {
 	router := gin.Default()
 	fmt.Println(router)
 	router.POST("/Registers", post_user.PostUserInfo)
-	router
 	fmt.Println("post call")
-	//router.POST("/login", post_user.LoginHandler)
+	router.POST("/login", post_signup.LoginHandler)
 	router.Run("localhost:8080")
 }
